@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import PostForm from "@/app/components/post/PostForm";
 import { useAuth } from "@/hooks/useAuth";
-import { usePosts } from "@/hooks/usePosts";
 import { Post } from "@/lib/types";
 import { getPost } from "@/app/actions/postActions";
 

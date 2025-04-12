@@ -55,7 +55,7 @@ export class ApiClient {
       if (data) {
         if (isFormData) {
           // For FormData, remove Content-Type to let browser set it with boundary
-          delete headers["Content-Type"];
+          delete (headers as { [key: string]: string })["Content-Type"];
           options.body = data;
         } else {
           options.body = JSON.stringify(data);
