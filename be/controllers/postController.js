@@ -34,10 +34,10 @@ export const createPost = async (req, res) => {
       return res.status(500).json({ message: "Failed to create post" });
     }
 
-    res.status(201).json(data);
+    return res.status(201).json(data);
   } catch (error) {
     console.error("Server error creating post:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -136,7 +136,7 @@ export const getPosts = async (req, res) => {
       console.error("Error fetching total post count:", countError);
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       posts: postsWithCounts,
       totalPosts: count || 0,
       currentPage: page,
@@ -144,85 +144,92 @@ export const getPosts = async (req, res) => {
     });
   } catch (error) {
     console.error("Server error fetching posts:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
 // Get Single Post (similar, fetch post and its comments/likes)
 export const getPostById = async (req, res) => {
   const { id } = req.params;
-  const userId = req.user?.id; // Get logged in user ID if available
+  const userId = req.user?.id;
+
+  // We'll collect all our data first, then send response only once
+  let post, comments, likeCount, isLiked;
 
   try {
-    // Fetch post details including user
-    const { data: post, error: postError } = await supabase
+    // 1. Fetch post
+    const { data: postData, error: postError } = await supabase
       .from("posts")
       .select(
         `
-                id, title, content, image_url, created_at, updated_at,
-                user: users!posts_user_id_fkey ( id, username )
-            `
+        id, title, content, image_url, created_at, updated_at,
+        user: users!posts_user_id_fkey ( id, username )
+      `
       )
       .eq("id", id)
       .single();
 
     if (postError) {
-      console.error("Error fetching post:", postError);
-      return res.status(postError.code === "PGRST116" ? 404 : 500).json({
-        message:
-          postError.code === "PGRST116"
-            ? "Post not found"
-            : "Failed to fetch post",
-      });
+      if (postError.code === "PGRST116") {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      return res.status(500).json({ message: "Failed to fetch post" });
     }
 
-    // Fetch comments for the post
-    const { data: comments, error: commentsError } = await supabase
+    post = postData;
+
+    // 2. Fetch comments (in parallel with other queries)
+    const commentsPromise = supabase
       .from("comments")
       .select(
         `
-                id, content, created_at, updated_at,
-                user: users ( id, username )
-            `
+        id, content, created_at, updated_at,
+        user: users ( id, username )
+      `
       )
       .eq("post_id", id)
       .order("created_at", { ascending: false });
 
-    // Fetch like count and check if current user liked it
-    const { count: likeCount, error: likeCountError } = await supabase
+    // 3. Fetch likes count (in parallel)
+    const likesCountPromise = supabase
       .from("likes")
       .select("*", { count: "exact", head: true })
       .eq("post_id", id);
 
-    let isLiked = false;
+    // 4. Check if user liked (in parallel)
+    let userLikedPromise = Promise.resolve({ data: null });
     if (userId) {
-      const { data: likeData, error: likeCheckError } = await supabase
+      userLikedPromise = supabase
         .from("likes")
         .select("user_id")
         .eq("post_id", id)
         .eq("user_id", userId)
         .maybeSingle();
-      isLiked = !!likeData;
     }
 
-    if (commentsError || likeCountError /* || likeCheckError (handle null) */) {
-      console.error("Error fetching post details:", {
-        commentsError,
-        likeCountError,
-      });
-      // Decide if you want to return partial data or fail
-    }
+    // Wait for all queries to complete
+    const [commentsResult, likesCountResult, userLikedResult] =
+      await Promise.all([commentsPromise, likesCountPromise, userLikedPromise]);
 
-    res.status(200).json({
+    comments = commentsResult.data || [];
+    likeCount = likesCountResult.count || 0;
+    isLiked = !!userLikedResult.data;
+
+    // Construct response object
+    const response = {
       ...post,
-      comments: comments || [],
-      comment_count: comments.length || 0,
-      like_count: likeCount || 0,
-      is_liked: isLiked, // Add flag for frontend UI
-    });
+      comments,
+      comment_count: comments.length,
+      like_count: likeCount,
+      is_liked: isLiked,
+    };
+
+    // Send response only once
+    return res.status(200).json(response);
   } catch (error) {
     console.error(`Server error fetching post ${id}:`, error);
-    res.status(500).json({ message: "Internal server error" });
+    // Only send error response if we haven't sent a response already
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -292,10 +299,10 @@ export const updatePost = async (req, res) => {
         .json({ message: "Post not found or access denied" });
     }
 
-    res.status(200).json(data);
+    return res.status(200).json(data);
   } catch (error) {
     console.error("Server error updating post:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -325,9 +332,9 @@ export const deletePost = async (req, res) => {
     }
 
     // Note: ON DELETE CASCADE in DB schema handles related likes/comments
-    res.status(200).json({ message: "Post deleted successfully" }); // 204 No Content is also common
+    return res.status(200).json({ message: "Post deleted successfully" }); // 204 No Content is also common
   } catch (error) {
     console.error("Server error deleting post:", error);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };

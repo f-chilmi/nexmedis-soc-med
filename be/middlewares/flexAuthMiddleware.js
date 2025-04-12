@@ -9,16 +9,14 @@ const flexAuthMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    next();
+    return next(); // Add return here to stop execution
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    // Attach user info (like id) to the request object
-    // You might fetch user details from DB here if needed, but id is often enough
-    req.user = { id: decoded.userId }; // Assuming your JWT payload has userId
+    req.user = { id: decoded.userId };
 
     next();
   } catch (error) {
