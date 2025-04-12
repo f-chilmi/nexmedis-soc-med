@@ -2,7 +2,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["ahzkzholnhwwpmjivnly.supabase.co"], // Add your Supabase domain for image hosting
+    domains: ["ahzkzholnhwwpmjivnly.supabase.co"],
     remotePatterns: [
       {
         protocol: "https",
