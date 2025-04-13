@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { ApiResponse } from "./types";
 
 export class ApiClient {
@@ -83,9 +83,9 @@ export class ApiClient {
       // Handle path revalidation if paths are provided
       if (shouldRevalidate) {
         if (Array.isArray(shouldRevalidate)) {
-          shouldRevalidate.forEach((path) => revalidatePath(path));
+          shouldRevalidate.forEach((path) => revalidateTag(path));
         } else {
-          revalidatePath(shouldRevalidate);
+          revalidateTag(shouldRevalidate);
         }
       }
 

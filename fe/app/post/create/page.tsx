@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import PostForm from "@/app/components/post/PostForm";
 import { useAuth } from "@/hooks/useAuth";
+import Loading from "@/app/components/common/Loading";
 
 export default function CreatePostPage() {
   const { user, loading: authLoading } = useAuth();
@@ -16,11 +17,7 @@ export default function CreatePostPage() {
   }, [user, authLoading, router]);
 
   if (authLoading || !user) {
-    return (
-      <div className="flex justify-center py-16">
-        <div className="w-10 h-10 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

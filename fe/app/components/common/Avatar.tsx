@@ -28,14 +28,7 @@ const Avatar = ({
     : "??"; // Default if username is missing
 
   return (
-    <div
-      className="rounded-full flex items-center justify-center text-white font-bold"
-      style={{
-        width: "40px",
-        height: "40px",
-        backgroundColor: "#6B7280", // Default background color
-      }}
-    >
+    <div className="rounded-full flex items-center justify-center text-white text-2xl font-semibold w-[40px] h-[40px] bg-[#6B7280]">
       {initials}
     </div>
   );

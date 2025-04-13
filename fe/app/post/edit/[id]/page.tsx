@@ -6,6 +6,7 @@ import PostForm from "@/app/components/post/PostForm";
 import { useAuth } from "@/hooks/useAuth";
 import { Post } from "@/lib/types";
 import { getPost } from "@/app/actions/postActions";
+import Loading from "@/app/components/common/Loading";
 
 export default function EditPostPage() {
   const { id: postId } = useParams();
@@ -48,11 +49,7 @@ export default function EditPostPage() {
   }, [post, user, router, postId]);
 
   if (authLoading || loading || !user || !post) {
-    return (
-      <div className="flex justify-center py-16">
-        <div className="w-10 h-10 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {

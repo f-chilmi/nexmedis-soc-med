@@ -1,0 +1,533 @@
+{
+	"info": {
+		"_postman_id": "de7605f5-3bb1-46e5-bfc1-2b6d532c0f3f",
+		"name": "NexmedisSocMed",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "14098158"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "fchilmi5@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "test",
+									"type": "default"
+								},
+								{
+									"key": "username",
+									"value": "fchilmi5",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:8000/api/auth/register",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const responseJson = pm.response.json();",
+									"",
+									"const token = responseJson.token; ",
+									"",
+									"pm.environment.set(\"token\", token); ",
+									"",
+									"pm.test(\"Token is saved as environment variable\", () => {",
+									"    pm.expect(pm.environment.get(\"token\")).to.eql(token);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWE2MDhiYy1mZDNjLTQ3NmItOTA1ZC0zYTZlMTExZmEwZmYiLCJlbWFpbCI6ImZjaGlsbWk1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiZmNoaWxtaTUiLCJpYXQiOjE3NDQzNjMxMjQsImV4cCI6MTc0NDM2NjcyNH0.YGvCN68yOZX_yKOHCMqOQfLOpSXUIJIYYoaOB4D-GX8",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "fchilmi5@gmail.com",
+									"type": "default"
+								},
+								{
+									"key": "password",
+									"value": "test",
+									"type": "default"
+								},
+								{
+									"key": "username",
+									"value": "fchilmi5",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "login success",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "API_KEY",
+										"value": "4zFyavvhYrClyUdM",
+										"type": "default"
+									},
+									{
+										"key": "API_SECRET",
+										"value": "ySpxCVxffZWrZPXomOZiGPR5eAePaF8Z",
+										"type": "default"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "email",
+											"value": "fchilmi5@gmail.com",
+											"type": "default"
+										},
+										{
+											"key": "password",
+											"value": "test",
+											"type": "default"
+										},
+										{
+											"key": "username",
+											"value": "fchilmi5",
+											"type": "default"
+										}
+									]
+								},
+								"url": {
+									"raw": "localhost:8000/api/auth/login",
+									"host": [
+										"localhost"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"auth",
+										"login"
+									],
+									"query": [
+										{
+											"key": "timestamp",
+											"value": "1733105247",
+											"disabled": true
+										},
+										{
+											"key": "sign",
+											"value": "59f2c1c5e41f97bdf4acd4c7f54cd075",
+											"disabled": true
+										},
+										{
+											"key": "language",
+											"value": "4",
+											"disabled": true
+										},
+										{
+											"key": "start_date",
+											"value": null,
+											"disabled": true
+										},
+										{
+											"key": "end_date",
+											"value": "1733710072",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "http://localhost:3000"
+								},
+								{
+									"key": "Vary",
+									"value": "Origin"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "405"
+								},
+								{
+									"key": "ETag",
+									"value": "W/\"195-bmQ3vUGHjAeJvIxgizrarZ57l7I\""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 11 Apr 2025 09:18:44 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"Login successful\",\n    \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI0OWE2MDhiYy1mZDNjLTQ3NmItOTA1ZC0zYTZlMTExZmEwZmYiLCJlbWFpbCI6ImZjaGlsbWk1QGdtYWlsLmNvbSIsInVzZXJuYW1lIjoiZmNoaWxtaTUiLCJpYXQiOjE3NDQzNjMxMjQsImV4cCI6MTc0NDM2NjcyNH0.YGvCN68yOZX_yKOHCMqOQfLOpSXUIJIYYoaOB4D-GX8\",\n    \"user\": {\n        \"id\": \"49a608bc-fd3c-476b-905d-3a6e111fa0ff\",\n        \"email\": \"fchilmi5@gmail.com\",\n        \"username\": \"fchilmi5\"\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "posts",
+			"item": [
+				{
+					"name": "get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"const responseJson = pm.response.json();",
+									"",
+									"const postId = responseJson.posts[0].id; ",
+									"",
+									"pm.environment.set(\"postId\", postId); ",
+									"",
+									"pm.test(\"Post Id is saved as environment variable\", () => {",
+									"    pm.expect(pm.environment.get(\"postId\")).to.eql(token);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/posts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get detail",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/posts/{{postId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"{{postId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "content",
+									"value": "testjskdjsd 2",
+									"type": "text"
+								},
+								{
+									"key": "title",
+									"value": "dsdsdsldksd 1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "content",
+									"value": "test updated",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts/{{postId}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"{{postId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "content",
+									"value": "test updated",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/posts/d54554c4-7da1-4f2e-822f-cbb420e4373c",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"posts",
+								"d54554c4-7da1-4f2e-822f-cbb420e4373c"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "likes",
+			"item": [
+				{
+					"name": "likes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "postId",
+									"value": "{{postId}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/likes",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"likes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "comments",
+			"item": [
+				{
+					"name": "comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "postId",
+									"value": "{{postId}}",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "test comment 2",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/api/comments",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "localhost:8000"
+		}
+	]
+}

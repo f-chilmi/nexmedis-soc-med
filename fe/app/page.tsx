@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import PostCard from "./components/post/PostCard";
 import { deletePost, getPosts, likePost } from "./actions/postActions";
 import { Post } from "@/lib/types";
+import Loading from "./components/common/Loading";
 
 export default function HomePage() {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -61,8 +62,8 @@ export default function HomePage() {
           if (p.id === postId) {
             return {
               ...p,
-              likedByUser: response.data!.liked,
-              totalLikes: response.data!.liked
+              is_liked: response.data!.liked,
+              like_count: response.data!.liked
                 ? p.like_count + 1
                 : p.like_count - 1,
             };
@@ -89,7 +90,17 @@ export default function HomePage() {
 
   return (
     <div className="max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Recent Posts</h1>
+      <div className="flex justify-between">
+        <h1 className="text-3xl font-bold mb-6">Recent Posts</h1>
+        <div className="mb-6 flex justify-end">
+          <button
+            onClick={() => (window.location.href = "/post/create")}
+            className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow transition duration-200"
+          >
+            + Create
+          </button>
+        </div>
+      </div>
 
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -98,9 +109,7 @@ export default function HomePage() {
       )}
 
       {loading && posts.length === 0 ? (
-        <div className="flex justify-center py-8">
-          <div className="w-10 h-10 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
-        </div>
+        <Loading />
       ) : posts.length > 0 ? (
         <div className="space-y-6">
           {posts.map((post) => (

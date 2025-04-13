@@ -93,17 +93,24 @@ const PostForm: React.FC<PostFormProps> = ({
         ...formData,
         image: selectedImage || undefined,
       };
+      const submitFormData = new FormData();
+      submitFormData.append("title", formData.title);
+      submitFormData.append("content", formData.content);
+      if (selectedImage && selectedImage instanceof File) {
+        submitFormData.append("image", selectedImage);
+      }
+      console.log(submitData);
 
       const response =
         isEditing && initialData
-          ? await updatePost(initialData.id, submitData)
-          : await createPost(submitData);
-
+          ? await updatePost(initialData.id, submitFormData)
+          : await createPost(submitFormData);
+      console.log(response);
       setIsSubmitting(false);
 
       if (response.success && response.data) {
         // Navigate to the post detail page
-        router.push(`/post/${response.data.id}`);
+        router.replace(`/post/${response.data.id}`);
 
         // Refresh the current route to ensure we see the updated data
         router.refresh();

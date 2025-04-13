@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useEffect, useState, ReactNode } from "react";
-import { AuthUser, User } from "../lib/types";
+import { User } from "../lib/types";
 
 import { LoginCredentials, RegisterCredentials } from "../lib/types";
 import { useRouter } from "next/navigation";

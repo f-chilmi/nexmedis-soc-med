@@ -106,9 +106,8 @@ export const login = async (req, res) => {
     const { password_hash, ...userWithoutPassword } = user;
 
     res.status(200).json({
-      message: "Login successful",
+      ...userWithoutPassword,
       token,
-      user: userWithoutPassword,
     });
   } catch (error) {
     console.error("Login error:", error);
