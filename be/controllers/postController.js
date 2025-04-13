@@ -42,11 +42,10 @@ export const createPost = async (req, res) => {
 };
 
 export const getPosts = async (req, res) => {
-  // Pagination parameters (optional)
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
-  const userId = req.user?.id; // Assuming req.user is set by authMiddleware
+  const userId = req.user?.id;
 
   try {
     // Fetch posts with associated user data
@@ -130,7 +129,7 @@ export const getPosts = async (req, res) => {
     // Get total count for pagination info
     const { count, error: countError } = await supabase
       .from("posts")
-      .select("*", { count: "exact", head: true }); // head: true only gets count
+      .select("*", { count: "exact", head: true });
 
     if (countError) {
       console.error("Error fetching total post count:", countError);
@@ -153,7 +152,6 @@ export const getPostById = async (req, res) => {
   const { id } = req.params;
   const userId = req.user?.id;
 
-  // We'll collect all our data first, then send response only once
   let post, comments, likeCount, isLiked;
 
   try {
@@ -224,11 +222,9 @@ export const getPostById = async (req, res) => {
       is_liked: isLiked,
     };
 
-    // Send response only once
     return res.status(200).json(response);
   } catch (error) {
     console.error(`Server error fetching post ${id}:`, error);
-    // Only send error response if we haven't sent a response already
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -247,7 +243,6 @@ export const updatePost = async (req, res) => {
   }
 
   try {
-    // Optional: Check if the post exists and belongs to the user first
     const { data: existingPost, error: findError } = await supabase
       .from("posts")
       .select("id, user_id")
@@ -292,8 +287,6 @@ export const updatePost = async (req, res) => {
       return res.status(500).json({ message: "Failed to update post" });
     }
     if (!data) {
-      // This might happen if the row doesn't match the WHERE clause (e.g., wrong user)
-      // The initial check should prevent this, but good to be aware
       return res
         .status(404)
         .json({ message: "Post not found or access denied" });
@@ -332,7 +325,7 @@ export const deletePost = async (req, res) => {
     }
 
     // Note: ON DELETE CASCADE in DB schema handles related likes/comments
-    return res.status(200).json({ message: "Post deleted successfully" }); // 204 No Content is also common
+    return res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     console.error("Server error deleting post:", error);
     return res.status(500).json({ message: "Internal server error" });

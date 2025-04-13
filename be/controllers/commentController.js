@@ -1,4 +1,3 @@
-// controllers/commentController.js
 import { supabase } from "../config/supabaseClient.js";
 
 // Add Comment
@@ -48,10 +47,8 @@ export const addComment = async (req, res) => {
   }
 };
 
-// Get Comments for a Post (often fetched with the post itself, but can be separate)
 export const getComments = async (req, res) => {
   const { postId } = req.params;
-  // Add pagination if needed
 
   try {
     const { data, error } = await supabase
@@ -63,7 +60,7 @@ export const getComments = async (req, res) => {
             `
       )
       .eq("post_id", postId)
-      .order("created_at", { ascending: true }); // Or descending for newest first
+      .order("created_at", { ascending: true });
 
     if (error) {
       console.error("Error fetching comments:", error);
@@ -77,7 +74,6 @@ export const getComments = async (req, res) => {
   }
 };
 
-// Delete Comment (Add Update if needed)
 export const deleteComment = async (req, res) => {
   const { commentId } = req.params;
   const userId = req.user.id;

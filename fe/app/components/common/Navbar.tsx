@@ -161,7 +161,7 @@ const Navbar: React.FC = () => {
                     Login
                   </Link>
                   <Link
-                    href="/auth/register"
+                    href="/register"
                     className="block px-3 py-2 rounded-md text-base font-medium bg-blue-600 text-white hover:bg-blue-700"
                   >
                     Register

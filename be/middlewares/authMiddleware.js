@@ -1,4 +1,3 @@
-// middleware/authMiddleware.js
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
@@ -17,9 +16,8 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    // Attach user info (like id) to the request object
-    // You might fetch user details from DB here if needed, but id is often enough
-    req.user = { id: decoded.userId }; // Assuming your JWT payload has userId
+
+    req.user = { id: decoded.userId };
     next();
   } catch (error) {
     console.error("JWT verification error:", error);

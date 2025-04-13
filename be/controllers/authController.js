@@ -1,4 +1,3 @@
-// controllers/authController.js
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { supabase } from "../config/supabaseClient.js";
@@ -27,7 +26,6 @@ export const register = async (req, res) => {
       .maybeSingle(); // Returns one or null
 
     if (findError && findError.code !== "PGRST116") {
-      // Ignore 'PGRST116' (No rows found)
       console.error("Error checking existing user:", findError);
       return res.status(500).json({ message: "Database error checking user" });
     }
@@ -44,21 +42,31 @@ export const register = async (req, res) => {
     const { data: newUser, error: insertError } = await supabase
       .from("users")
       .insert([{ email, password_hash, username }])
-      .select("id, email, username, created_at") // Select the data to return
-      .single(); // Expecting a single row inserted
+      .select("id, email, username, created_at")
+      .single();
+
+    console.log(newUser);
 
     if (insertError) {
       console.error("Error inserting user:", insertError);
       return res.status(500).json({ message: "Error creating user" });
     }
 
-    // Don't send password hash back
-    res
-      .status(201)
-      .json({ message: "User registered successfully", user: newUser });
+    // 4. Generate JWT
+    const payload = {
+      userId: newUser.id,
+      email: newUser.email,
+      username: newUser.username,
+    };
+    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: "30d" }); // Token expires in 1 month
+
+    return res.status(201).json({
+      ...newUser,
+      token,
+    });
   } catch (error) {
     console.error("Registration error:", error);
-    res
+    return res
       .status(500)
       .json({ message: "Internal server error during registration" });
   }
@@ -77,7 +85,7 @@ export const login = async (req, res) => {
       .from("users")
       .select("id, email, username, password_hash")
       .eq("email", email)
-      .single(); // Expecting one user or null/error
+      .single();
 
     if (findError && findError.code !== "PGRST116") {
       console.error("Error finding user:", findError);
@@ -105,13 +113,15 @@ export const login = async (req, res) => {
     // Remove password hash before sending user data
     const { password_hash, ...userWithoutPassword } = user;
 
-    res.status(200).json({
+    return res.status(200).json({
       ...userWithoutPassword,
       token,
     });
   } catch (error) {
     console.error("Login error:", error);
-    res.status(500).json({ message: "Internal server error during login" });
+    return res
+      .status(500)
+      .json({ message: "Internal server error during login" });
   }
 };
 

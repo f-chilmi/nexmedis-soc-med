@@ -25,7 +25,7 @@ const Avatar = ({
         .map((name) => name[0])
         .join("")
         .toUpperCase()
-    : "??"; // Default if username is missing
+    : "??";
 
   return (
     <div className="rounded-full flex items-center justify-center text-white text-2xl font-semibold w-[40px] h-[40px] bg-[#6B7280]">

@@ -68,6 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     const response = await register(credentials);
     setLoading(false);
+    console.log(response);
 
     if (response.success && response.data) {
       setUser(response.data);

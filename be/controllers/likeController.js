@@ -1,4 +1,3 @@
-// controllers/likeController.js
 import { supabase } from "../config/supabaseClient.js";
 
 export const toggleLike = async (req, res) => {
@@ -35,7 +34,6 @@ export const toggleLike = async (req, res) => {
       res.status(200).json({ message: "Post unliked", liked: false });
     } else {
       // Like doesn't exist, so create it (like)
-      // Optional: Check if post exists before liking
       const { data: postExists, error: postCheckError } = await supabase
         .from("posts")
         .select("id")
@@ -51,7 +49,7 @@ export const toggleLike = async (req, res) => {
         .insert([{ user_id: userId, post_id: postId }]);
 
       if (insertError) {
-        // Handle potential errors like foreign key violation if post_id is invalid
+        // Handle potential errors
         console.error("Error liking post:", insertError);
         return res.status(500).json({ message: "Failed to like post" });
       }

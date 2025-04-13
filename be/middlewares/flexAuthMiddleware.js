@@ -9,7 +9,7 @@ const flexAuthMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return next(); // Add return here to stop execution
+    return next();
   }
 
   const token = authHeader.split(" ")[1];

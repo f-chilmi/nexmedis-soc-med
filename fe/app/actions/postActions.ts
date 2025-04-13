@@ -1,8 +1,7 @@
 "use server";
 
 import { apiClient } from "@/lib/apiClient";
-import { ApiResponse, Post, PostFormData, PostResponse } from "@/lib/types";
-import { revalidateTag } from "next/cache";
+import { ApiResponse, Post, PostResponse } from "@/lib/types";
 
 export async function getPosts(): Promise<ApiResponse<PostResponse>> {
   return apiClient.get<PostResponse>("/posts", ["/posts"], ["/posts"]);
